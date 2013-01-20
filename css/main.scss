@@ -1,35 +1,55 @@
-body { 
+
+@mixin prefix($property, $value...) {
+  @each $prefix in -webkit-, -moz-, -ms-, -o-, '' {
+    #{$prefix}#{$property}: $value;
+  }
+}
+
+* { 
     margin: 0;
     padding: 0;
+}
+
+body { 
     overflow: hidden;
+    font-family: 'Cardo', serif;
+    letter-spacing: -0.07em;
+    // text-shadow: 0 1px 0 #ddd;
+    color: #333;
+    @include prefix(user-select, none);
+
 }
 
 #readout { 
+    display: none;
     position: fixed;
     font: normal 10px 'Monaco', monospace;
-    -webkit-font-smoothing: none;
-
-    background: rgba(255, 255, 255, 0.9);
     width: 300px;
-    padding: 10px;
 }
 
-#mass, #strength, #damping { 
-    &:before { 
-        width: 100px;
-        margin-right: 10px;
-        display: inline-block;
-        text-align: right;
+#canvas { 
+    position: fixed;
+}
 
+#essay {
+    
+    position: fixed;
+    z-index: 5;
+    // border: 1px solid;
+
+    width: 400px;
+    text-align: center;
+    padding: 20px;
+
+    h1 { 
+        margin-bottom: 20px;
+        font-style: italic;
     }
-}
+    h2 { 
+        text-transform: uppercase;
+        letter-spacing: 0.5em;
+        font-weight: bold;
+        font-size: 0.7em;
+    }
 
-#mass:before { 
-    content: 'Mass: ';
-}
-#strength:before { 
-    content: 'Strength: ';
-}
-#damping:before { 
-    content: 'Damping: ';
 }
