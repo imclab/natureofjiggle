@@ -10,18 +10,15 @@
     padding: 0;
     cursor: default;
 }
+
 body, html { 
-height: 100%;
+    height: 100%;
 }
+
 body { 
-
-    // overflow: hidden;
-    font-family: 'Cardo', serif;
-    // letter-spacing: -0.07em;
-    // text-shadow: 0 1px 0 #ddd;
-    color: #333;
     @include prefix(user-select, none);
-
+    font-family: 'Cardo', serif;
+    color: #333;
 }
 
 #readout { 
@@ -37,28 +34,24 @@ canvas {
     height: 100%;
 }
 
+
 #essay {
 
-    // -webkit-font-smoothing: default;
     @include prefix(box-sizing, border-box);
-
-
     top: 50%;
     left: 50%;
-
     position: fixed;
     z-index: 5;
 
     .inner { 
     
-        // @include prefix(transform-origin, 0 0);
         @include prefix(box-sizing, border-box);
 
-        background-color: rgba(247, 182, 45, 0.9);
-
+        background: rgba(247,183,45,0.9);
         border-radius: 10000px;
         padding: 120px;
         width: 550px;
+        height: 550px;
     }
 
     h1 { 
@@ -86,4 +79,21 @@ canvas {
         }
     }
 
+}
+
+
+.cssgradients #essay .inner {
+    background: none;
+    background-image: linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247,183,45,0.9) 73%);
+    background-image: -o-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247,183,45,0.9) 73%);
+    background-image: -moz-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247,183,45,0.9) 73%);
+    background-image: -webkit-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247,183,45,0.9) 73%);
+    background-image: -ms-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247,183,45,0.9) 73%);
+    background-image: -webkit-gradient(
+        linear,
+        right bottom,
+        left top,
+        color-stop(0.21, rgba(96, 197, 177, 0.9)),
+        color-stop(0.73, rgba(247,183,45,0.9))
+    );
 }

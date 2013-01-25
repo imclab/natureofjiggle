@@ -7,13 +7,13 @@ body, html {
   height: 100%; }
 
 body {
-  font-family: 'Cardo', serif;
-  color: #333;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
-  user-select: none; }
+  user-select: none;
+  font-family: 'Cardo', serif;
+  color: #333; }
 
 #readout {
   display: none;
@@ -42,10 +42,11 @@ canvas {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: rgba(247, 182, 45, 0.9);
+    background: rgba(247, 183, 45, 0.9);
     border-radius: 10000px;
     padding: 120px;
-    width: 550px; }
+    width: 550px;
+    height: 550px; }
   #essay h1 {
     margin-bottom: 20px;
     font-style: italic;
@@ -60,3 +61,12 @@ canvas {
     font-size: 0.9em; }
   #essay pre {
     font: normal 12px 'Monaco', monospace; }
+
+.cssgradients #essay .inner {
+  background: none;
+  background-image: linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
+  background-image: -o-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
+  background-image: -moz-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
+  background-image: -webkit-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
+  background-image: -ms-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
+  background-image: -webkit-gradient(linear, right bottom, left top, color-stop(0.21, rgba(96, 197, 177, 0.9)), color-stop(0.73, rgba(247, 183, 45, 0.9))); }
