@@ -1,3 +1,7 @@
+$inner-size: 550px;
+$inner-padding: 120px;
+$curve: cubic-bezier(0.105, 0.750, 0.175, 1.000);
+
 
 @mixin prefix($property, $value...) {
   @each $prefix in -webkit-, -moz-, -ms-, -o-, '' {
@@ -34,6 +38,9 @@ canvas {
     height: 100%;
 }
 
+cite {
+    font-size: 0.8em;
+}
 
 #essay {
 
@@ -44,27 +51,21 @@ canvas {
     z-index: 5;
 
     .inner { 
-    
         @include prefix(box-sizing, border-box);
-
         background: rgba(247,183,45,0.9);
-        border-radius: 10000px;
-        padding: 120px;
-        width: 550px;
-        height: 550px;
+        border-radius: $inner-size;
+        padding: $inner-padding;
+        width: $inner-size;
+        height: $inner-size;
     }
 
     h1 { 
+        line-height: 1em;
         margin-bottom: 20px;
         font-style: italic;
         letter-spacing: -0.05em;
-    }
-
-    h2 { 
-        text-transform: uppercase;
-        letter-spacing: 0.5em;
-        font-weight: bold;
-        font-size: 0.7em;
+        
+        @include prefix(transition, line-height 300ms $curve);
     }
 
     p {
@@ -74,9 +75,10 @@ canvas {
 
     pre { 
         font: normal 12px 'Monaco', monospace;
-        .strength, .damping, .mass { 
-            // color: rgb(0, 176, 209);
-        }
+    }
+
+    * { 
+        @include prefix(transition, opacity 300ms linear);
     }
 
 }
@@ -96,4 +98,16 @@ canvas {
         color-stop(0.21, rgba(96, 197, 177, 0.9)),
         color-stop(0.73, rgba(247,183,45,0.9))
     );
+}
+
+@media only screen 
+and (max-width: 450px) {
+    #essay .inner * { 
+        opacity: 0;
+    }
+    #essay .inner h1 {
+        opacity: 1;
+        // height: $inner-size - $inner-padding*2;
+        line-height: $inner-size - $inner-padding*2;
+    }
 }

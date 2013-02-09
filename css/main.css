@@ -26,6 +26,9 @@ canvas {
   width: 100%;
   height: 100%; }
 
+cite {
+  font-size: 0.8em; }
+
 #essay {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -43,24 +46,31 @@ canvas {
     -o-box-sizing: border-box;
     box-sizing: border-box;
     background: rgba(247, 183, 45, 0.9);
-    border-radius: 10000px;
+    border-radius: 550px;
     padding: 120px;
     width: 550px;
     height: 550px; }
   #essay h1 {
+    line-height: 1em;
     margin-bottom: 20px;
     font-style: italic;
-    letter-spacing: -0.05em; }
-  #essay h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.5em;
-    font-weight: bold;
-    font-size: 0.7em; }
+    letter-spacing: -0.05em;
+    -webkit-transition: line-height 300ms cubic-bezier(0.105, 0.75, 0.175, 1);
+    -moz-transition: line-height 300ms cubic-bezier(0.105, 0.75, 0.175, 1);
+    -ms-transition: line-height 300ms cubic-bezier(0.105, 0.75, 0.175, 1);
+    -o-transition: line-height 300ms cubic-bezier(0.105, 0.75, 0.175, 1);
+    transition: line-height 300ms cubic-bezier(0.105, 0.75, 0.175, 1); }
   #essay p {
     margin-bottom: 20px;
     font-size: 0.9em; }
   #essay pre {
     font: normal 12px 'Monaco', monospace; }
+  #essay * {
+    -webkit-transition: opacity 300ms linear;
+    -moz-transition: opacity 300ms linear;
+    -ms-transition: opacity 300ms linear;
+    -o-transition: opacity 300ms linear;
+    transition: opacity 300ms linear; }
 
 .cssgradients #essay .inner {
   background: none;
@@ -70,3 +80,11 @@ canvas {
   background-image: -webkit-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
   background-image: -ms-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
   background-image: -webkit-gradient(linear, right bottom, left top, color-stop(0.21, rgba(96, 197, 177, 0.9)), color-stop(0.73, rgba(247, 183, 45, 0.9))); }
+
+@media only screen and (max-width: 450px) {
+  #essay .inner * {
+    opacity: 0; }
+
+  #essay .inner h1 {
+    opacity: 1;
+    line-height: 310px; } }

@@ -4,9 +4,9 @@ var WINDOW_SCALE = 1;
 var MIN_STRENGTH = 0.1;
 var MAX_STRENGTH = 3.5;
 var MAX_DAMPING = 0.97;
-var MIN_DAMPING = 0.35;
-var PADDING = 120;
-
+var MIN_DAMPING = 0.65;
+var PADDING = 170;
+var STEPS = 30;
 var TWO_PI = Math.PI*2;
 
 var domReadout = document.getElementById('readout');
@@ -17,7 +17,6 @@ var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
 var elastic = new Elastic();
 var elastic2 = new Elastic();
-var clicked = false;
 var path;
 
 var x = window.innerWidth/2;
@@ -26,10 +25,8 @@ var y = window.innerHeight/2;
 var px;
 var py;
 
-
-function previewJiggle() {
+function playJiggle() {
   framesSinceClick = 0;
-  clicked = true;
   elastic2.value = 0;
 }
 
@@ -80,6 +77,8 @@ function onWindowResize() {
   canvas.width = Math.ceil(ratio*window.innerWidth);
   canvas.height = Math.ceil(ratio*window.innerHeight);
 
+  console.log(canvas.width, canvas.height);
+
   plot();
 
 }
@@ -87,6 +86,7 @@ function onWindowResize() {
 
 
 function plot() {
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   elastic.velocity = 0;
@@ -95,16 +95,14 @@ function plot() {
   if (path) path.remove();
   path = new paper.Path();
   path.strokeCap = 'round';
-  path.strokeWidth = 2 * window.devicePixelRatio;
-  path.strokeColor = '#333';
-
-  var steps = 100;
+  path.strokeWidth = 3;
+  path.strokeColor = '#666';
 
   ctx.beginPath();
 
-  for (var i = 0; i < steps; i++) {
+  for (var i = 0; i < STEPS; i++) {
 
-    var pos = getPos(i, steps, elastic.value);
+    var pos = getPos(i, STEPS, elastic.value);
 
     if (i == 0)
       path.moveTo(new paper.Point(pos.x, Math.floor(pos.y)));
@@ -149,8 +147,8 @@ function circle(x, y, d) {
   ctx.fill();
 }
 
-function getPos(i, steps, value) {
-  var x = rnd.map(i, 0, steps-1, 0, canvas.width);
+function getPos(i, STEPS, value) {
+  var x = rnd.map(i, 0, STEPS-1, 0, canvas.width);
   var y = rnd.map(value, elastic.dest, 1, 0, -canvas.height/2) + canvas.height/2;
   return { 
     x: x,
@@ -172,16 +170,37 @@ function setSpringParams() {
   plot();
 }
 
+function suppress() {
+  elastic2.dest = 0.95;
+  elastic2.value = 0.98;
+}
+
+function release() {
+  elastic2.dest = 1;
+}
+
 $(document.body).prepend(canvas);
 paper.setup(canvas);
 
 if (Modernizr.touch) {
+
   window.addEventListener('touchstart', touchStart, true);
+  window.addEventListener('touchstart', suppress, true);
+
   window.addEventListener('touchmove', drag, true);
-  window.addEventListener('touchend', previewJiggle, true);
+  
+  window.addEventListener('touchend', playJiggle, true);
+  window.addEventListener('touchend', release, true);
+
 } else { 
+
+  window.addEventListener('mousedown', suppress, true);
+
   window.addEventListener('mousemove', drag, true);
-  window.addEventListener('mousedown', previewJiggle, false);  
+
+  window.addEventListener('mouseup', playJiggle, false);  
+  window.addEventListener('mouseup', release, false);  
+
 }
 
 window.addEventListener('resize', onWindowResize, false);

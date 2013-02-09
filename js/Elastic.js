@@ -1,7 +1,3 @@
-var domStrength = document.getElementById('strength');
-var domMass = document.getElementById('mass');
-var domDamping = document.getElementById('damping');
-
 var Elastic = function() {
 
   this.value = 0;
