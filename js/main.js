@@ -1,32 +1,66 @@
-var BASE_SCALE = 2;
-var STROKE_WEIGHT = 10;
-var WINDOW_SCALE = 1;
-var MIN_STRENGTH = 0.1;
-var MAX_STRENGTH = 3.5;
-var MAX_DAMPING = 0.97;
-var MIN_DAMPING = 0.65;
-var PADDING = 170;
-var STEPS = 30;
-var TWO_PI = Math.PI*2;
+var BASE_SCALE = 2,
+    STROKE_WEIGHT = 10,
+    WINDOW_SCALE = 1,
+    MIN_STRENGTH = 0.1,
+    MAX_STRENGTH = 3.5,
+    MAX_DAMPING = 0.97,
+    MIN_DAMPING = 0.65,
+    PADDING = 170,
+    STEPS = 30,
+    TWO_PI = Math.PI*2,
+    domReadout = document.getElementById('readout'),
+    domTest = document.getElementById('test'),
+    domEssay = document.getElementById('essay'),
+    canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d'),
+    elastic = new Elastic(),
+    elastic2 = new Elastic(),
+    path,
+    x = window.innerWidth/2,
+    y = window.innerHeight/2,
+    px,
+    py;
 
-var domReadout = document.getElementById('readout');
-var domTest = document.getElementById('test');
-var domEssay = document.getElementById('essay');
+init();
 
-var canvas = document.createElement('canvas');
-var ctx = canvas.getContext('2d');
-var elastic = new Elastic();
-var elastic2 = new Elastic();
-var path;
+function init() {
 
-var x = window.innerWidth/2;
-var y = window.innerHeight/2;
+  loadWebFont();
+  $(document.body).prepend(canvas);
+  paper.setup(canvas);
 
-var px;
-var py;
+  if (Modernizr.touch) {
+
+    window.addEventListener('touchstart', touchStart, true);
+    window.addEventListener('touchstart', suppress, true);
+    window.addEventListener('touchmove', drag, true);
+    window.addEventListener('touchend', playJiggle, true);
+    window.addEventListener('touchend', release, true);
+
+  } else { 
+
+    window.addEventListener('mousedown', suppress, true);
+    window.addEventListener('mousemove', drag, true);
+    window.addEventListener('mouseup', playJiggle, false);  
+    window.addEventListener('mouseup', release, false);  
+
+  }
+
+  window.addEventListener('resize', onWindowResize, false);
+  window.addEventListener('orientationchange', onWindowResize, false);
+
+  elastic2.dest = 1;
+  elastic2.value = 1;
+
+  onWindowResize();
+  setSpringParams();
+  loop();
+
+}
 
 function playJiggle() {
-  framesSinceClick = 0;
+  elastic2.strength = elastic.strength;
+  elastic2.damping = elastic.damping;
   elastic2.value = 0;
 }
 
@@ -83,8 +117,6 @@ function onWindowResize() {
 
 }
 
-
-
 function plot() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -118,13 +150,10 @@ function plot() {
 
 }
 
-
 function loop() {
-  
   requestAnimationFrame(loop);
   elastic2.update();
   setScale(domEssay, elastic2.value / BASE_SCALE );
-
 }
 
 function constrain(v, min, max) {
@@ -165,50 +194,33 @@ function xToStrength(x) {
 }
 
 function setSpringParams() {
-  elastic2.damping = elastic.damping = yToDamping(y);
-  elastic2.strength = elastic.strength = xToStrength(x);
+  elastic.damping = yToDamping(y);
+  elastic.strength = xToStrength(x);
   plot();
 }
 
 function suppress() {
-  elastic2.dest = 0.95;
-  elastic2.value = 0.98;
+  elastic2.strength = 0.08;
+  elastic2.damping = 0.4;
+  elastic2.dest = 0.8;
 }
 
-function release() {
+function release(e) {
+  setSpringParams();
   elastic2.dest = 1;
 }
 
-$(document.body).prepend(canvas);
-paper.setup(canvas);
-
-if (Modernizr.touch) {
-
-  window.addEventListener('touchstart', touchStart, true);
-  window.addEventListener('touchstart', suppress, true);
-
-  window.addEventListener('touchmove', drag, true);
-  
-  window.addEventListener('touchend', playJiggle, true);
-  window.addEventListener('touchend', release, true);
-
-} else { 
-
-  window.addEventListener('mousedown', suppress, true);
-
-  window.addEventListener('mousemove', drag, true);
-
-  window.addEventListener('mouseup', playJiggle, false);  
-  window.addEventListener('mouseup', release, false);  
-
+function loadWebFont() {
+  window.WebFontConfig = {
+    google: { families: [ 'Cardo:400italic', 'Cardo:400' ] }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })();
 }
-
-window.addEventListener('resize', onWindowResize, false);
-window.addEventListener('orientationchange', onWindowResize, false);
-
-elastic2.dest = 1;
-elastic2.value = 1;
-
-onWindowResize();
-setSpringParams();
-loop();
