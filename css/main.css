@@ -1,7 +1,6 @@
 * {
   margin: 0;
-  padding: 0;
-  cursor: default; }
+  padding: 0; }
 
 body, html {
   height: 100%; }
@@ -29,16 +28,26 @@ canvas {
 cite {
   font-size: 0.8em; }
 
+#preview * {
+  cursor: default; }
+
 #essay {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
+  -webkit-transition: opacity 400ms linear;
+  -moz-transition: opacity 400ms linear;
+  -ms-transition: opacity 400ms linear;
+  -o-transition: opacity 400ms linear;
+  transition: opacity 400ms linear;
+  opacity: 0;
   top: 50%;
   left: 50%;
-  position: fixed;
-  z-index: 5; }
+  position: fixed; }
+  .essay-centered.wf-active #essay, .essay-centered.wf-inactive #essay {
+    opacity: 1; }
   #essay .inner {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -72,6 +81,56 @@ cite {
     -o-transition: opacity 300ms linear;
     transition: opacity 300ms linear; }
 
+#keyframes {
+  top: 100%;
+  opacity: 0;
+  overflow: auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.88);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  -webkit-transition: all 500ms cubic-bezier(0.105, 0.75, 0.175, 1);
+  -moz-transition: all 500ms cubic-bezier(0.105, 0.75, 0.175, 1);
+  -ms-transition: all 500ms cubic-bezier(0.105, 0.75, 0.175, 1);
+  -o-transition: all 500ms cubic-bezier(0.105, 0.75, 0.175, 1);
+  transition: all 500ms cubic-bezier(0.105, 0.75, 0.175, 1);
+  padding: 20px; }
+  .keyframes #keyframes {
+    top: 0;
+    opacity: 1; }
+  #keyframes .label {
+    -webkit-font-smoothing: antialiased;
+    color: #fff;
+    margin: 20px 0; }
+  #keyframes input, #keyframes #output {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    border-radius: 0;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    font-family: Monaco, monospace;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border: 0;
+    color: #fff; }
+  #keyframes #output {
+    height: 400px;
+    resize: none; }
+    #keyframes #output::-webkit-scrollbar {
+      width: 8px; }
+    #keyframes #output::-webkit-scrollbar-track {
+      background-color: rgba(0, 0, 0, 0.15); }
+    #keyframes #output::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.9);
+      border-radius: 10px; }
+
 .cssgradients #essay .inner {
   background: none;
   background-image: linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
@@ -80,11 +139,3 @@ cite {
   background-image: -webkit-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
   background-image: -ms-linear-gradient(right bottom, rgba(96, 197, 177, 0.9) 21%, rgba(247, 183, 45, 0.9) 73%);
   background-image: -webkit-gradient(linear, right bottom, left top, color-stop(0.21, rgba(96, 197, 177, 0.9)), color-stop(0.73, rgba(247, 183, 45, 0.9))); }
-
-@media only screen and (max-width: 450px) {
-  #essay .inner * {
-    opacity: 0; }
-
-  #essay .inner h1 {
-    opacity: 1;
-    line-height: 310px; } }

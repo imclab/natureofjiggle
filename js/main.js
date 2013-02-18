@@ -16,35 +16,44 @@ var BASE_SCALE = 2,
     elastic = new Elastic(),
     elastic2 = new Elastic(),
     path,
+    showingKeyframes = false,
     x = window.innerWidth/2,
     y = window.innerHeight/2,
     px,
-    py;
+    py,
+    $preview = $('#preview'),
+    $template = $('#template'),
+    $startingValues = $('#starting-values'),
+    $endingValues = $('#ending-values'),
+    $output = $('#output'),
+    preview = $preview[0];
 
 init();
 
 function init() {
 
   loadWebFont();
-  $(document.body).prepend(canvas);
+  $preview.prepend(canvas);
   paper.setup(canvas);
 
   if (Modernizr.touch) {
 
-    window.addEventListener('touchstart', touchStart, true);
-    window.addEventListener('touchstart', suppress, true);
-    window.addEventListener('touchmove', drag, true);
-    window.addEventListener('touchend', playJiggle, true);
-    window.addEventListener('touchend', release, true);
+    preview.addEventListener('touchstart', touchStart, true);
+    preview.addEventListener('touchstart', suppress, true);
+    preview.addEventListener('touchmove', drag, true);
+    preview.addEventListener('touchend', playJiggle, true);
+    preview.addEventListener('touchend', release, true);
 
   } else { 
 
-    window.addEventListener('mousedown', suppress, true);
-    window.addEventListener('mousemove', drag, true);
-    window.addEventListener('mouseup', playJiggle, false);  
-    window.addEventListener('mouseup', release, false);  
+    preview.addEventListener('mousedown', suppress, true);
+    preview.addEventListener('mousemove', drag, true);
+    preview.addEventListener('mouseup', playJiggle, false);  
+    preview.addEventListener('mouseup', release, false);  
 
   }
+
+
 
   window.addEventListener('resize', onWindowResize, false);
   window.addEventListener('orientationchange', onWindowResize, false);
@@ -53,8 +62,13 @@ function init() {
   elastic2.value = 1;
 
   onWindowResize();
+  $(document.body).parent().addClass('essay-centered');
+
   setSpringParams();
   loop();
+
+  // toggleShowingKeyframes();
+  // generateKeyframes();
 
 }
 
@@ -67,6 +81,13 @@ function playJiggle() {
 function touchStart(e) {
   px = e.touches[0].pageX;
   py = e.touches[0].pageY;
+}
+
+function toggleShowingKeyframes() {
+
+  showingKeyframes = !showingKeyframes;
+  $(document.body).toggleClass('keyframes');
+
 }
 
 function drag(e) {
@@ -106,12 +127,10 @@ function onWindowResize() {
   domEssay.style.marginTop = -(w-PADDING)/2 - 6 + 'px'; // Because it sits on a line all weird.
   domEssay.style.marginLeft = -(w-PADDING)/2 + 'px';
 
-  var ratio = url.boolean('usePixelRatio', true) ? window.devicePixelRatio || 1 : 1;
+  var ratio = window.devicePixelRatio || 1;
 
   canvas.width = Math.ceil(ratio*window.innerWidth);
   canvas.height = Math.ceil(ratio*window.innerHeight);
-
-  console.log(canvas.width, canvas.height);
 
   plot();
 
@@ -177,8 +196,8 @@ function circle(x, y, d) {
 }
 
 function getPos(i, STEPS, value) {
-  var x = rnd.map(i, 0, STEPS-1, 0, canvas.width);
-  var y = rnd.map(value, elastic.dest, 1, 0, -canvas.height/2) + canvas.height/2;
+  var x = map(i, 0, STEPS-1, 0, canvas.width);
+  var y = map(value, elastic.dest, 1, 0, -canvas.height/2) + canvas.height/2;
   return { 
     x: x,
     y: y
@@ -186,11 +205,11 @@ function getPos(i, STEPS, value) {
 }
 
 function yToDamping(y) {
-  return Math.pow(rnd.map(y, 0, window.innerHeight, MAX_DAMPING, MIN_DAMPING), 2);
+  return Math.pow(map(y, 0, window.innerHeight, MAX_DAMPING, MIN_DAMPING), 2);
 }
 
 function xToStrength(x) {
-  return rnd.map(x, 0, window.innerWidth, MAX_STRENGTH, MIN_STRENGTH);
+  return map(x, 0, window.innerWidth, MAX_STRENGTH, MIN_STRENGTH);
 }
 
 function setSpringParams() {
@@ -208,6 +227,58 @@ function suppress() {
 function release(e) {
   setSpringParams();
   elastic2.dest = 1;
+}
+
+function map(value, istart, istop, ostart, ostop) {
+  return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
+
+function generateKeyframes() {
+
+  var vendors = { '-webkit-': 1, '-moz-': 1, '': 1 },
+      name = 'jiggle',
+      str = '',
+      template = $template.val(),
+      templateRendered,
+      start = $startingValues.val().replace(/ */gi, '').split(',');
+      end = $endingValues.val().replace(/ */gi, '').split(',');
+      values = [];
+
+  elastic.value = -1;
+  elastic.dest = 0;
+
+  while (values.length < 101) {
+    values.push(elastic.value);
+    elastic.update();
+  }
+
+  for (vendor in vendors) {
+
+    str += '@{vendor}keyframes {name} {\n'.replace('{vendor}', vendor)
+                                          .replace('{name}', name);
+
+    for (var i = 0; i < values.length; i++) {
+
+      templateRendered = template.replace(/\{p\}/gi, vendor);
+
+      for (var j = 0; j < start.length; j++) {
+        
+        var re = new RegExp('\\{'+j+'\\}', 'gi');
+        var value = map(values[i], -1, 0, parseFloat(start[j]), parseFloat(end[j])).toFixed(6);
+        templateRendered = templateRendered.replace(re, value);
+
+      }
+
+      str += '    '+i+'% { ' + templateRendered + ' }\n';
+    }
+
+    str += '}\n';
+    str += '\n';   
+
+  }
+
+  $output.val(str);
+
 }
 
 function loadWebFont() {

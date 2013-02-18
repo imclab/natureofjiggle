@@ -12,7 +12,6 @@ $curve: cubic-bezier(0.105, 0.750, 0.175, 1.000);
 * { 
     margin: 0;
     padding: 0;
-    cursor: default;
 }
 
 body, html { 
@@ -42,13 +41,25 @@ cite {
     font-size: 0.8em;
 }
 
+#preview * { 
+    cursor: default;
+}
+
 #essay {
 
+    .essay-centered.wf-active &,
+    .essay-centered.wf-inactive & { 
+        opacity: 1;
+    }
+
     @include prefix(box-sizing, border-box);
+    @include prefix(transition, opacity 400ms linear);
+
+    opacity: 0;
     top: 50%;
     left: 50%;
+
     position: fixed;
-    z-index: 5;
 
     .inner { 
         @include prefix(box-sizing, border-box);
@@ -83,6 +94,72 @@ cite {
 
 }
 
+#keyframes { 
+
+    top: 100%;
+    opacity: 0;
+
+    overflow: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.88);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+
+    @include prefix(transition, all 500ms $curve);
+
+    .keyframes & {
+
+        top: 0;
+        opacity: 1;
+
+    }
+
+    padding: 20px;
+
+    .label {
+
+        -webkit-font-smoothing: antialiased;
+        color: #fff;
+        margin: 20px 0;
+
+    }
+
+    input, #output { 
+        @include prefix(box-sizing, border-box);
+        -webkit-font-smoothing: antialiased;
+        border-radius: 0;
+        font-size: 16px;
+        outline: none;
+        width: 100%;
+        font-family: Monaco, monospace;
+        background-color: rgba(0,0,0,0.2);
+        padding: 20px;
+        border: 0;
+        color: #fff;
+    }
+
+    #output { 
+        height: 400px;
+        resize: none;
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+        &::-webkit-scrollbar-track {
+            background-color: rgba(0,0,0,0.15);
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.9);
+            border-radius: 10px;
+        }
+    }
+
+
+
+}
+
+
 
 .cssgradients #essay .inner {
     background: none;
@@ -100,14 +177,3 @@ cite {
     );
 }
 
-@media only screen 
-and (max-width: 450px) {
-    #essay .inner * { 
-        opacity: 0;
-    }
-    #essay .inner h1 {
-        opacity: 1;
-        // height: $inner-size - $inner-padding*2;
-        line-height: $inner-size - $inner-padding*2;
-    }
-}

@@ -15,9 +15,8 @@
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="js/vendor/jquery-1.9.0.min.js"></script>
-        <script src="js/vendor/dat.gui.min.js"></script>
-        <script src="always/always.js"></script>
-        <script src="js/paper.js"></script>
+        <script src="js/vendor/rAF.js"></script>
+        <script src="js/vendor/paper.js"></script>
 
     </head>
     <body>
@@ -26,25 +25,40 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <div id="essay">
-            <div class="inner">
+        <div id="preview">
 
-            <h1>On the nature of Jiggle.</h1>
-            <p>Hooke's law of elasticity is an approximation that states that the extension of a spring is in direct proportion with the load applied to it. <cite>&mdash; Wikipedia</cite></p>
-            <p>Hooke's law is the best law. It has limitless potential in its application to procedural animation. By manipulating a few parameters, a single equation gives rise to an enormous range of personalities.</p>
+            <div id="essay">
+                <div class="inner">
 
-    <pre><span class="var velocity">velocity</span> += -<span class="var strength">strength</span> * ( <span class="var value">value</span> - <span class="var rest">rest</span> );
-<span class="var velocity">velocity</span> *= <span class="var damping">damping</span>;
-<span class="var value">value</span> += <span class="var velocity">velocity</span>;</pre>
+                <h1>On the nature of Jiggle.</h1>
+                <p>Hooke's law of elasticity is an approximation that states that the extension of a spring is in direct proportion with the load applied to it. <cite>&mdash; Wikipedia</cite></p>
+                <p>Hooke's law is the best law. It has limitless potential in its application to procedural animation. By manipulating a few parameters, a single equation gives rise to an enormous range of personalities.</p>
 
+                </div>
             </div>
+
+        </div>
+
+        <div id="keyframes">
+
+            <div class="label">Template</div>
+            <input id="template" value="{p}transform: scale({0}, {1}) translateY({2}px);"></input>
+            
+            <div class="label">Starting Values</div>
+            <input id="starting-values" value="0, 1, 20"></input>
+            
+            <div class="label">Ending Values</div>
+            <input id="ending-values" value="1, 1, 0"></input>
+
+            <div class="label">CSS Keyframes</div>
+            <textarea id="output" spellcheck="false"></textarea>
+
         </div>
 
         <script src="js/Elastic.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
