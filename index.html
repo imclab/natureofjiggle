@@ -33,7 +33,9 @@
                 <h1>On the nature of Jiggle.</h1>
                 <p>Hooke's law of elasticity is an approximation that states that the extension of a spring is in direct proportion with the load applied to it. <cite>&mdash; Wikipedia</cite></p>
                 <p>Hooke's law is the best law. It has limitless potential in its application to procedural animation. By manipulating a few parameters, a single equation gives rise to an enormous range of personalities.</p>
-
+<pre><span class="var velocity">velocity</span> += -<span class="var strength">strength</span> * ( <span class="var value">value</span> - <span class="var rest">rest</span> );
+<span class="var velocity">velocity</span> *= <span class="var damping">damping</span>;
+<span class="var value">value</span> += <span class="var velocity">velocity</span>;</pre>
                 </div>
             </div>
 
@@ -51,7 +53,7 @@
             <input id="ending-values" value="1, 1, 0"></input>
 
             <div class="label">CSS Keyframes</div>
-            <textarea id="output" spellcheck="false"></textarea>
+            <textarea id="output"spellcheck="false"></textarea>
 
         </div>
 
